@@ -34,14 +34,22 @@ func serveCmdFunc(cmd *cobra.Command, args []string) error {
 		log.Errorf("Error creating client: %v", err)
 		return err
 	}
+	log.Infof("Created a new client")
+
+	// TODO: Execute real logic here
+
+	// Open a websocket connection and listen
+	err = client.Open()
+	if err != nil {
+		log.Errorf("Failing opening a connection to Discord: %v", err)
+	}
+	defer client.Close()
 	log.WithFields(log.Fields{
 		"sessionId": client.State.SessionID,
 		"user":      client.State.User,
 		"guilds":    client.State.Guilds,
 		"channels":  client.State.PrivateChannels,
-	}).Infof("Created a new client client")
-
-	// TODO: Execute real logic here
+	}).Infof("Connected to Discord")
 
 	// Listen and trap os signals
 	sigChan := make(chan os.Signal, 1)
@@ -50,6 +58,5 @@ func serveCmdFunc(cmd *cobra.Command, args []string) error {
 
 	// Cleanup
 	log.Info("Recieved signal, shutting down...")
-	client.Close()
 	return nil
 }
