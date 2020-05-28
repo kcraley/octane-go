@@ -4,10 +4,12 @@ import (
 	"fmt"
 	"runtime"
 	"time"
+
+	"github.com/bwmarrin/discordgo"
 )
 
 const (
-	stringFormat = "{BuildDate: %s, GitVersion: %s, GoOSArch: %s, GoVersion: %s}"
+	stringFormat = "{BuildDate: %s, DiscordGo: %s, GitVersion: %s, GoOSArch: %s, GoVersion: %s}"
 )
 
 // Version variable containing all build information
@@ -17,6 +19,7 @@ var (
 
 	Version = buildInformation{
 		BuildDate:  buildDate,
+		DiscordGo:  discordgo.VERSION,
 		GitVersion: gitVersion,
 		GoOSArch:   fmt.Sprintf("%s, %s", runtime.GOOS, runtime.GOARCH),
 		GoVersion:  runtime.Version(),
@@ -26,6 +29,7 @@ var (
 // buildInformation holds all information about the build
 type buildInformation struct {
 	BuildDate  string
+	DiscordGo  string
 	GitVersion string
 	GoOSArch   string
 	GoVersion  string
@@ -36,6 +40,7 @@ func (b *buildInformation) String() string {
 	return fmt.Sprintf(
 		stringFormat,
 		b.BuildDate,
+		b.DiscordGo,
 		b.GitVersion,
 		b.GoOSArch,
 		b.GoVersion,
