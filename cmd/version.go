@@ -1,9 +1,10 @@
 package cmd
 
 import (
+	"fmt"
+
 	"github.com/kcraley/octane-go/version"
 
-	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 )
 
@@ -24,5 +25,5 @@ func init() {
 // versionCmdFunc is the entrypoint for `octane version`
 func versionCmdFunc(cmd *cobra.Command, args []string) {
 	// Print binary version information
-	log.Info(version.Version.String())
+	fmt.Println(version.Version.String())
 }
