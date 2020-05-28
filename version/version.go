@@ -3,6 +3,7 @@ package version
 import (
 	"fmt"
 	"runtime"
+	"time"
 )
 
 const (
@@ -11,9 +12,12 @@ const (
 
 // Version variable containing all build information
 var (
+	buildDate  = time.Now().String()
+	gitVersion = ""
+
 	Version = buildInformation{
-		BuildDate:  "",
-		GitVersion: "",
+		BuildDate:  buildDate,
+		GitVersion: gitVersion,
 		GoOSArch:   fmt.Sprintf("%s, %s", runtime.GOOS, runtime.GOARCH),
 		GoVersion:  runtime.Version(),
 	}
