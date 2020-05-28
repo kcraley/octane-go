@@ -4,8 +4,8 @@ import (
 	"os"
 
 	"github.com/kcraley/octane-go/pkg/configuration"
-
 	"github.com/kelseyhightower/envconfig"
+
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 )
@@ -42,7 +42,7 @@ func init() {
 
 func initConfig() {
 	// Marshal configuration from environment variables
-	err := envconfig.Process(appName, &config)
+	err := envconfig.Process(appName, config)
 	if err != nil {
 		log.Fatalf("Failed parsing configuration from environment variables: %v", err)
 	}
