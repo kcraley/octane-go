@@ -15,12 +15,16 @@ type Client struct {
 
 // NewClient Creates and returns a new discord client
 func NewClient(token string) (*Client, error) {
+	handlers := make([]interface{}, 0)
+	handlers = append(handlers, handleReady)
+
 	dcSession, err := discordgo.New("Bot " + token)
 	if err != nil {
 		return nil, err
 	}
 	client := &Client{
-		Session: dcSession,
+		Session:  dcSession,
+		Handlers: handlers,
 	}
 	return client, nil
 }
@@ -35,4 +39,9 @@ func (c *Client) RegisterAllHandlers() error {
 		}
 	}
 	return errors.New("Client does not have any registered handlers")
+}
+
+// handleReady handles the Ready event
+func handleReady(s *discordgo.Session, ev *discordgo.Ready) {
+	s.UpdateListeningStatus("your commands")
 }
