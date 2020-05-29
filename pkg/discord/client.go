@@ -15,8 +15,12 @@ type Client struct {
 
 // NewClient Creates and returns a new discord client
 func NewClient(token string) (*Client, error) {
+	// Make a slice of handlers for the Client
 	handlers := make([]interface{}, 0)
-	handlers = append(handlers, handleReady)
+	handlers = append(handlers,
+		handleReady,
+		handleMessageCreate,
+	)
 
 	dcSession, err := discordgo.New("Bot " + token)
 	if err != nil {
@@ -35,8 +39,8 @@ func (c *Client) RegisterAllHandlers() error {
 	if len(c.Handlers) > 0 {
 		for _, handler := range c.Handlers {
 			c.Session.AddHandler(handler)
-			return nil
 		}
+		return nil
 	}
 	return errors.New("Client does not have any registered handlers")
 }
