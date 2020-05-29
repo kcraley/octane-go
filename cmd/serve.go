@@ -39,16 +39,16 @@ func serveCmdFunc(cmd *cobra.Command, args []string) error {
 	// TODO: Execute real logic here
 
 	// Open a websocket connection and listen
-	err = client.Open()
+	err = client.Session.Open()
 	if err != nil {
 		log.Errorf("Failing opening a connection to Discord: %v", err)
 	}
-	defer client.Close()
+	defer client.Session.Close()
 	log.WithFields(log.Fields{
-		"sessionId": client.State.SessionID,
-		"user":      client.State.User,
-		"guilds":    client.State.Guilds,
-		"channels":  client.State.PrivateChannels,
+		"sessionId": client.Session.State.SessionID,
+		"user":      client.Session.State.User,
+		"guilds":    client.Session.State.Guilds,
+		"channels":  client.Session.State.PrivateChannels,
 	}).Infof("Connected to Discord")
 
 	// Listen and trap os signals
