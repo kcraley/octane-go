@@ -36,6 +36,11 @@ func serveCmdFunc(cmd *cobra.Command, args []string) error {
 	}
 	log.Infof("Created a new client")
 
+	// Register all handlers
+	if err := client.RegisterAllHandlers(); err != nil {
+		log.Errorf("Error registering handlers: %s", err)
+	}
+
 	// TODO: Execute real logic here
 
 	// Open a websocket connection and listen

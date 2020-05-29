@@ -1,6 +1,10 @@
 package discord
 
-import "github.com/bwmarrin/discordgo"
+import (
+	"errors"
+
+	"github.com/bwmarrin/discordgo"
+)
 
 // Client is a custom Discord client containing the
 // session and handlers.
@@ -19,4 +23,16 @@ func NewClient(token string) (*Client, error) {
 		Session: dcSession,
 	}
 	return client, nil
+}
+
+// RegisterAllHandlers iterates through all existing Client
+// handlers and adds them to the Session.
+func (c *Client) RegisterAllHandlers() error {
+	if len(c.Handlers) > 0 {
+		for _, handler := range c.Handlers {
+			c.Session.AddHandler(handler)
+			return nil
+		}
+	}
+	return errors.New("Client does not have any registered handlers")
 }
