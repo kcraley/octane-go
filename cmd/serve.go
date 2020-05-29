@@ -41,12 +41,10 @@ func serveCmdFunc(cmd *cobra.Command, args []string) error {
 		log.Errorf("Error registering handlers: %s", err)
 	}
 
-	// TODO: Execute real logic here
-
 	// Open a websocket connection and listen
 	err = client.Session.Open()
 	if err != nil {
-		log.Errorf("Failing opening a connection to Discord: %v", err)
+		log.Errorf("Failed opening a connection to Discord: %v", err)
 	}
 	defer client.Session.Close()
 	log.WithFields(log.Fields{
