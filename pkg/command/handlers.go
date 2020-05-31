@@ -26,7 +26,7 @@ func (r *Router) handleMessageCreate(s *discordgo.Session, m *discordgo.MessageC
 
 		for _, command := range r.Commands {
 			if content == command.Name {
-				command.Trigger()
+				command.Trigger(s, m.Message)
 			}
 		}
 	}
