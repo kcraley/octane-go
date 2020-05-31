@@ -15,3 +15,6 @@ deps:
 
 build: deps
 	go build -ldflags="$(LDFLAGS)" -o $(binary) .
+
+test: deps
+	go test -v ./...
