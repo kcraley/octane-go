@@ -18,3 +18,6 @@ build: deps
 
 test: deps
 	go test -v ./...
+
+vet: deps
+	go vet
