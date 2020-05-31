@@ -27,8 +27,12 @@ func init() {
 	// Add `serve` subcommand to `octane`
 	rootCmd.AddCommand(serveCmd)
 
+	// Setup persistent flags for the `serve` subcommand
 	serveCmd.PersistentFlags().StringVarP(&config.Prefix, "prefix", "p", configuration.DefaultPrefix, "the Discord API token used to connect")
 	serveCmd.PersistentFlags().StringVarP(&config.Token, "token", "t", "", "the Discord API token used to connect")
+
+	// Require Token to be passed
+	cobra.MarkFlagRequired(serveCmd.PersistentFlags(), "token")
 }
 
 // serveCmdFunc is the entrypoint for `octane serve`
