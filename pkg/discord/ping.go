@@ -1,8 +1,9 @@
 package discord
 
 import (
-	"github.com/bwmarrin/discordgo"
 	"github.com/kcraley/octane-go/pkg/command"
+
+	"github.com/bwmarrin/discordgo"
 )
 
 var pingCmd = &command.Command{
