@@ -36,7 +36,6 @@ func init() {
 	config = configuration.New()
 
 	// Root level flags for the CLI
-	rootCmd.PersistentFlags().StringVarP(&config.Token, "token", "t", "", "the Discord API token used to connect")
 	rootCmd.PersistentFlags().BoolVarP(&config.Verbose, "verbose", "v", false, "enables additional verbose output for troubleshooting")
 }
 
