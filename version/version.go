@@ -3,7 +3,6 @@ package version
 import (
 	"fmt"
 	"runtime"
-	"time"
 
 	"github.com/bwmarrin/discordgo"
 )
@@ -14,14 +13,14 @@ const (
 
 // Version variable containing all build information
 var (
-	buildDate  = time.Now().String()
+	buildDate  = ""
 	gitVersion = ""
 
 	Version = buildInformation{
 		BuildDate:  buildDate,
 		DiscordGo:  discordgo.VERSION,
 		GitVersion: gitVersion,
-		GoOSArch:   fmt.Sprintf("%s, %s", runtime.GOOS, runtime.GOARCH),
+		GoOSArch:   fmt.Sprintf("%s %s", runtime.GOOS, runtime.GOARCH),
 		GoVersion:  runtime.Version(),
 	}
 )
