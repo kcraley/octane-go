@@ -10,14 +10,22 @@ LDFLAGS=\
   -X $(module)/version.gitVersion=$(gitVersion)
 
 
+.PHONY: container
+container: Dockerfile
+	docker build -t $(binary):$(gitVersion) -f $< .
+
+.PHONY: deps
 deps:
 	go get
 
+.PHONY: build
 build: deps
 	go build -ldflags="$(LDFLAGS)" -o $(binary) .
 
+.PHONY: test
 test: deps
 	go test -v ./...
 
+.PHONY: vet
 vet: deps
 	go vet
