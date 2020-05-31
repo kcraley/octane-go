@@ -5,6 +5,7 @@ import (
 	"os/signal"
 	"syscall"
 
+	"github.com/kcraley/octane-go/pkg/configuration"
 	"github.com/kcraley/octane-go/pkg/discord"
 
 	log "github.com/sirupsen/logrus"
@@ -24,24 +25,23 @@ the bot to start handling traffic and commands.`,
 func init() {
 	// Add `serve` subcommand to `octane`
 	rootCmd.AddCommand(serveCmd)
+
+	serveCmd.PersistentFlags().StringVarP(&config.Prefix, "prefix", "p", configuration.DefaultPrefix, "the Discord API token used to connect")
+	serveCmd.PersistentFlags().StringVarP(&config.Token, "token", "t", "", "the Discord API token used to connect")
 }
 
 // serveCmdFunc is the entrypoint for `octane serve`
 func serveCmdFunc(cmd *cobra.Command, args []string) error {
 	// Create a new client with the configuration token
-	client, err := discord.NewClient(config.Token)
+	client, err := discord.NewClient(config.Token, config.Prefix)
 	if err != nil {
 		log.Errorf("Error creating client: %v", err)
 		return err
 	}
 	log.Infof("Created a new client")
 
-	// Register all handlers
-	if err := client.RegisterAllHandlers(); err != nil {
-		log.Errorf("Error registering handlers: %s", err)
-	} else {
-		log.Infof("Registered handlers: %d", len(client.Handlers))
-	}
+	// Initialize all handlers
+	client.Router.Initialize(client.Session)
 
 	// Open a websocket connection and listen
 	err = client.Session.Open()
