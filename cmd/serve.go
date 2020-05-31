@@ -7,6 +7,7 @@ import (
 
 	"github.com/kcraley/octane-go/pkg/configuration"
 	"github.com/kcraley/octane-go/pkg/discord"
+	"github.com/kcraley/octane-go/version"
 
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
@@ -32,6 +33,14 @@ func init() {
 
 // serveCmdFunc is the entrypoint for `octane serve`
 func serveCmdFunc(cmd *cobra.Command, args []string) error {
+	log.WithFields(log.Fields{
+		"BuildDate":  version.Version.BuildDate,
+		"DiscordGo":  version.Version.DiscordGo,
+		"GitVersion": version.Version.GitVersion,
+		"GoOSArch":   version.Version.GoOSArch,
+		"GoVersion":  version.Version.GoVersion,
+	}).Infof("Starting the Octane Discord Bot!")
+
 	// Create a new client with the configuration token
 	client, err := discord.NewClient(config.Token, config.Prefix)
 	if err != nil {
