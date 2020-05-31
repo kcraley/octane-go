@@ -29,5 +29,13 @@ func NewClient(token string, prefix string) (*Client, error) {
 		Session: dcSession,
 		Router:  router,
 	}
+	client.registerCommands()
+
 	return client, nil
+}
+
+// registerCommands handles registering all discord commands
+func (c *Client) registerCommands() {
+	// Add all custom commands from this package below
+	c.Router.RegisterCommand(pingCmd)
 }
