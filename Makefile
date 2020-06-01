@@ -14,6 +14,12 @@ LDFLAGS=\
 container: Dockerfile
 	docker build -t $(binary):$(gitVersion) -f $< .
 
+.PHONY: serve
+serve:
+	docker run -it --rm --name $(binary) \
+	$(binary):$(gitVersion) \
+	serve -t $(token)
+
 .PHONY: deps
 deps:
 	go get
