@@ -1,10 +1,11 @@
 package command_test
 
 import (
-	"reflect"
 	"testing"
 
 	"github.com/kcraley/octane-go/pkg/command"
+
+	"github.com/google/go-cmp/cmp"
 )
 
 var (
@@ -21,8 +22,9 @@ func TestNewRouter(t *testing.T) {
 	for name, test := range routerTestCases {
 		t.Run(name, func(t *testing.T) {
 			actual := command.NewRouter(test.prefix)
-			if !reflect.DeepEqual(test.expected, actual) {
-				t.Fatalf("Expected: %v, Actual: %v", test.expected, actual)
+			diff := cmp.Diff(test.expected, actual)
+			if diff != "" {
+				t.Fatalf(diff)
 			}
 		})
 	}
