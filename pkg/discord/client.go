@@ -38,4 +38,5 @@ func NewClient(token string, prefix string) (*Client, error) {
 func (c *Client) registerCommands() {
 	// Add all custom commands from this package below
 	c.Router.RegisterCommand(pingCmd)
+	c.Router.RegisterCommand(versionCmd)
 }
