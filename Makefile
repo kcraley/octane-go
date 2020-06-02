@@ -15,7 +15,7 @@ container: Dockerfile
 	docker build -t $(binary):$(gitVersion) -f $< .
 
 .PHONY: serve
-serve:
+serve: container
 	docker run -it --rm --name $(binary) \
 	$(binary):$(gitVersion) \
 	serve -t $(token)
