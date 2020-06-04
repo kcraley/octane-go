@@ -37,7 +37,11 @@ func NewClient(token string, prefix string) (*Client, error) {
 // registerCommands handles registering all discord commands
 func (c *Client) registerCommands() {
 	// Add all custom commands from this package below
+	c.Router.RegisterCommand(embedCmd)
 	c.Router.RegisterCommand(pingCmd)
 	c.Router.RegisterCommand(triviaCmd)
 	c.Router.RegisterCommand(versionCmd)
+
+	// Register help command
+	c.Router.RegisterHelpCommand(c.Session)
 }
