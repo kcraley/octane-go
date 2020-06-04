@@ -46,7 +46,9 @@ type Player struct {
 // NewPlayer creates and returns a new Player instance
 func NewPlayer(username string) *Player {
 	p := Player{
-		Username: username,
+		Username:       username,
+		CorrectAnswers: 0,
+		Score:          0,
 	}
 	return &p
 }
