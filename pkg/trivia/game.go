@@ -48,8 +48,8 @@ func (g *Game) SprintScoreboard() string {
 	for _, player := range g.Players {
 		scoreboard += fmt.Sprintf(scoreboardPlayerRow,
 			player.Username,
-			player.Score,
-			player.CorrectAnswers,
+			int(player.Score),
+			int(player.CorrectAnswers),
 		)
 	}
 	return scoreboard
