@@ -2,6 +2,7 @@ package discord
 
 import (
 	"fmt"
+	"strings"
 	"time"
 
 	"github.com/kcraley/octane-go/pkg/command"
@@ -20,10 +21,8 @@ var triviaCmd = &command.Command{
 
 // triviaCmdFunc is the handler function for the trivia command
 func triviaCmdFunc(s *discordgo.Session, m *discordgo.Message) error {
-	// Create a new trivia Game
+	// Create a new trivia Game and fetch querstions
 	game := trivia.NewGame()
-
-	// Retrieve a random trivia question
 	questions, err := trivia.GetRandomQuestions(1)
 	if err != nil {
 		return err
@@ -45,6 +44,7 @@ func triviaCmdFunc(s *discordgo.Session, m *discordgo.Message) error {
 		}
 
 		// Set timeout and retrieve players' answers
+		// NOTE: This loop is most likely being rate limited
 		timeout := time.Now().Add(15 * time.Second).Unix()
 		for {
 			now := time.Now().Unix()
@@ -52,18 +52,27 @@ func triviaCmdFunc(s *discordgo.Session, m *discordgo.Message) error {
 				break
 			}
 
+			// Constantly get messages since the question was answered
 			answers, err := s.ChannelMessages(m.ChannelID, 100, "", questionMessage.ID, "")
 			if err != nil {
 				return err
 			}
+
+			// Iterate through each answer and handle it
 			for _, answer := range answers {
-				// Validate player exists and if not, create one
+				// Create a new Player in the Game if they don't exist
 				if !game.ContainsPlayer(answer.Author.Username) {
 					game.AddPlayer(trivia.NewPlayer(answer.Author.Username))
 				}
 
+				// Clean the answers
+				answer.Content = strings.ToLower(answer.Content)
+				answer.Content = strings.TrimSpace(answer.Content)
+
 				// Validate the user's response against the answer
-				if answer.Content == question.Answer {
+				// TODO: check if the user's answer is a partial match
+				// and give partial points.
+				if answer.Content == strings.ToLower(question.Answer) {
 					player := game.GetPlayer(answer.Author.Username)
 					player.AddCorrectAnswer()
 					player.AddScore(question.Value)
@@ -85,12 +94,8 @@ func triviaCmdFunc(s *discordgo.Session, m *discordgo.Message) error {
 		Color:     0xff0000,
 		Fields: []*discordgo.MessageEmbedField{
 			{
-				Name: "Trivia Score:",
-				Value: fmt.Sprintf("Players: %s, Score: %d, Correct Answers: %d",
-					game.Players[0].Username,
-					game.Players[0].Score,
-					game.Players[0].CorrectAnswers,
-				),
+				Name:   "Trivia Score:",
+				Value:  game.SprintScoreboard(),
 				Inline: true,
 			},
 		},
