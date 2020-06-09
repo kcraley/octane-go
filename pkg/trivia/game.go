@@ -1,5 +1,11 @@
 package trivia
 
+import "fmt"
+
+const (
+	scoreboardPlayerRow = "Players: %s, Score: %d, Correct Answers: %d\n"
+)
+
 // Game represents a single instance of a trivia game
 type Game struct {
 	Players []*Player
@@ -34,6 +40,19 @@ func (g *Game) GetPlayer(username string) *Player {
 		}
 	}
 	return nil
+}
+
+// SprintScoreboard returns generates the scoreboard
+func (g *Game) SprintScoreboard() string {
+	var scoreboard string
+	for _, player := range g.Players {
+		scoreboard += fmt.Sprintf(scoreboardPlayerRow,
+			player.Username,
+			player.Score,
+			player.CorrectAnswers,
+		)
+	}
+	return scoreboard
 }
 
 // Player represents an instance of a player in a trivia game
