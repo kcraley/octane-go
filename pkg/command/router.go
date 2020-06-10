@@ -1,6 +1,10 @@
 package command
 
-import "github.com/bwmarrin/discordgo"
+import (
+	"fmt"
+
+	"github.com/bwmarrin/discordgo"
+)
 
 // Router represents a command router for organizing
 // and executing commands registered.
@@ -37,4 +41,32 @@ func (r *Router) Initialize(session *discordgo.Session) {
 // which can be triggered
 func (r *Router) RegisterCommand(cmd *Command) {
 	r.Commands = append(r.Commands, cmd)
+}
+
+// RegisterHelpCommand adds the help command for usage information
+// on all registered commands
+func (r *Router) RegisterHelpCommand() {
+	var (
+		usageOutput string
+
+		helpCmdFunc = func(s *discordgo.Session, m *discordgo.Message) error {
+			for _, command := range r.Commands {
+				usageOutput += fmt.Sprintf("%s\t%s\n", command.Name, command.Description)
+			}
+			if _, err := s.ChannelMessageSend(m.ChannelID, usageOutput); err != nil {
+				return err
+			}
+			return nil
+		}
+
+		helpCmd = &Command{
+			Name:        "help",
+			Description: "Provides usage and additional information of registered commands",
+			Usage:       "help",
+			Example:     "help [subcommand]",
+			Handler:     helpCmdFunc,
+		}
+	)
+
+	r.RegisterCommand(helpCmd)
 }
