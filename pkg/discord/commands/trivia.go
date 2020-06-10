@@ -1,4 +1,4 @@
-package discord
+package commands
 
 import (
 	"fmt"
@@ -11,7 +11,8 @@ import (
 	"github.com/bwmarrin/discordgo"
 )
 
-var triviaCmd = &command.Command{
+// TriviaCmd is the bot command to start a new trivia game
+var TriviaCmd = &command.Command{
 	Name:        "trivia",
 	Description: "Starts a trivia session",
 	Usage:       "trivia",

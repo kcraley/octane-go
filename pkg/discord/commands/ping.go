@@ -1,4 +1,4 @@
-package discord
+package commands
 
 import (
 	"github.com/kcraley/octane-go/pkg/command"
@@ -6,7 +6,8 @@ import (
 	"github.com/bwmarrin/discordgo"
 )
 
-var pingCmd = &command.Command{
+// PingCmd is the command for sending a ping message back to the user
+var PingCmd = &command.Command{
 	Name:        "ping",
 	Description: "Responds with `pong!`",
 	Usage:       "ping",

@@ -1,4 +1,4 @@
-package discord
+package commands
 
 import (
 	"strings"
@@ -9,7 +9,8 @@ import (
 	"github.com/bwmarrin/discordgo"
 )
 
-var versionCmd = &command.Command{
+// VersionCmd is the command to reply with Octane build information
+var VersionCmd = &command.Command{
 	Name:        "version",
 	Description: "prints the version of Octane",
 	Usage:       "version",

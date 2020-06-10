@@ -1,4 +1,4 @@
-package discord
+package commands
 
 import (
 	"time"
@@ -7,7 +7,8 @@ import (
 	"github.com/kcraley/octane-go/pkg/command"
 )
 
-var embedCmd = &command.Command{
+// EmbedCmd is a test chat command for sending embedded messages
+var EmbedCmd = &command.Command{
 	Name:        "embed",
 	Description: "send an embedded test message",
 	Usage:       "embed",
