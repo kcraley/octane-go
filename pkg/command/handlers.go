@@ -4,6 +4,7 @@ import (
 	"strings"
 
 	"github.com/bwmarrin/discordgo"
+	log "github.com/sirupsen/logrus"
 )
 
 // handleReady is the handler for ready events
@@ -20,6 +21,12 @@ func (r *Router) handleMessageCreate(s *discordgo.Session, m *discordgo.MessageC
 
 	// Check for router prefix
 	if strings.HasPrefix(m.Content, r.Prefix) {
+		log.WithFields(log.Fields{
+			"Prefix":  r.Prefix,
+			"User":    m.Author.Username,
+			"Guild":   m.GuildID,
+			"Channel": m.GuildID,
+		}).Info("Prefix triggered")
 		// Clean the message content to pull the command
 		content := strings.TrimPrefix(m.Content, r.Prefix)
 		content = strings.TrimSpace(content)
