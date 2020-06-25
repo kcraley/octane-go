@@ -1,6 +1,7 @@
 package command
 
 import (
+	"errors"
 	"fmt"
 
 	"github.com/bwmarrin/discordgo"
@@ -21,13 +22,24 @@ func NewRouter(prefix string) *Router {
 }
 
 // GetCommand returns an existing Command given the name
-func (r *Router) GetCommand(name string) *Command {
+func (r *Router) GetCommand(name string) (*Command, error) {
 	for _, command := range r.Commands {
 		if name == command.Name {
-			return command
+			return command, nil
 		}
 	}
-	return nil
+	return nil, errors.New("Command not registered")
+}
+
+// ContainsCommand verifies that the Router has a command regsitered
+// with the given name
+func (r *Router) ContainsCommand(name string) bool {
+	for _, command := range r.Commands {
+		if name == command.Name {
+			return true
+		}
+	}
+	return false
 }
 
 // Initialize adds all handler functions to a *discordgo.Session

@@ -1,6 +1,7 @@
 package command
 
 import (
+	"math/rand"
 	"strings"
 
 	"github.com/bwmarrin/discordgo"
@@ -22,19 +23,52 @@ func (r *Router) handleMessageCreate(s *discordgo.Session, m *discordgo.MessageC
 	// Check for router prefix
 	if strings.HasPrefix(m.Content, r.Prefix) {
 		log.WithFields(log.Fields{
-			"Prefix":  r.Prefix,
-			"User":    m.Author.Username,
-			"Guild":   m.GuildID,
-			"Channel": m.GuildID,
+			"prefix":  r.Prefix,
+			"user":    m.Author.Username,
+			"guild":   m.GuildID,
+			"channel": m.GuildID,
+			"content": m.Content,
 		}).Info("Prefix triggered")
 		// Clean the message content to pull the command
 		content := strings.TrimPrefix(m.Content, r.Prefix)
 		content = strings.TrimSpace(content)
 
-		for _, command := range r.Commands {
-			if content == command.Name {
-				command.Trigger(s, m.Message)
-			}
+		if command, err := r.GetCommand(content); err != nil {
+			s.ChannelMessageSend(m.ChannelID, randomDefaultMessage())
+		} else {
+			command.Trigger(s, m.Message)
 		}
 	}
+}
+
+// randomDefaultMessage returns a random default message
+func randomDefaultMessage() string {
+	defaultMessages := []string{
+		"You rang?",
+		"What do you want?",
+		"Hi!",
+		"I was sleeping...",
+		"Bruh",
+		"At your command!",
+		"Goliath online",
+		"Executor?",
+		"I haven't got all day...",
+		"Make up your mind!",
+		"This is Jimmy",
+		"Recieving transmission",
+		"Howdy!",
+		"You got my attention",
+		"Wanna turn up the heat?",
+		"Call the shot",
+		"Go ahead, TACCOM",
+		"Jacked up and good to go",
+		"Oh my god, he's whacked!",
+		"Yes sir?",
+		"I read you",
+		"Reportin' for duty",
+		"Ready to roll out",
+	}
+
+	entry := rand.Intn(len(defaultMessages) - 1)
+	return defaultMessages[entry]
 }
