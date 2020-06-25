@@ -62,6 +62,7 @@ func (r *Router) RegisterHelpCommand() {
 		usageOutput string
 
 		helpCmdFunc = func(s *discordgo.Session, m *discordgo.Message) error {
+			usageOutput = ""
 			for _, command := range r.Commands {
 				usageOutput += fmt.Sprintf("%s\t%s\n", command.Name, command.Description)
 			}
