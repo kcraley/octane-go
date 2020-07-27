@@ -19,6 +19,28 @@ const (
 	profileURLTemplate = "https://my.callofduty.com/api/papi-client/stats/cod/%s/title/%s/platform/%s/gamer/%s/profile/type/%s"
 )
 
+// GetProfile retrieves a simplified profile
+func (c *Client) GetProfile(game, platform, username, mode string) (Profile, error) {
+	// Create default Profile
+	profile := Profile{}
+
+	// Get the raw player profile response
+	profileResponse, err := c.GetProfileRaw(game, platform, username, mode)
+	if err != nil {
+		return profile, err
+	}
+
+	profile.Title = profileResponse.Data.Title
+	profile.Platform = profileResponse.Data.Platform
+	profile.Username = profileResponse.Data.Username
+	profile.Type = profileResponse.Data.Type
+	profile.Level = profileResponse.Data.Level
+	profile.MaxLevel = profileResponse.Data.MaxLevel
+	profile.TotalXp = profileResponse.Data.TotalXp
+
+	return profile, nil
+}
+
 // GetProfileRaw retrieves a player's profile based on
 // the game, platform, username and mode
 func (c *Client) GetProfileRaw(game, platform, username, mode string) (*ProfileResponse, error) {
