@@ -41,6 +41,7 @@ func (c *Client) registerCommands() {
 	c.Router.RegisterCommand(commands.EmbedCmd)
 	c.Router.RegisterCommand(commands.PingCmd)
 	c.Router.RegisterCommand(commands.TriviaCmd)
+	c.Router.RegisterCommand(commands.WarzoneCmd)
 	c.Router.RegisterCommand(commands.VersionCmd)
 
 	// Register help command
