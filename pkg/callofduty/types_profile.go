@@ -1,5 +1,21 @@
 package callofduty
 
+// Profile is a simplified profile of a player
+type Profile struct {
+	Title            string  `json:"title"`
+	Platform         string  `json:"platform"`
+	Username         string  `json:"username"`
+	Type             string  `json:"type"`
+	Level            float64 `json:"level"`
+	MaxLevel         float64 `json:"maxLevel"`
+	LevelXpRemainder float64 `json:"levelXpRemainder"`
+	LevelXpGained    float64 `json:"levelXpGained"`
+	Prestige         float64 `json:"prestige"`
+	PrestigeID       float64 `json:"prestigeId"`
+	MaxPrestige      float64 `json:"maxPrestige"`
+	TotalXp          float64 `json:"totalXp"`
+}
+
 // ProfileResponse is the entire response object
 // returned when getting a player's profile
 type ProfileResponse struct {
