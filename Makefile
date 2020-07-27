@@ -17,6 +17,8 @@ container: Dockerfile
 .PHONY: serve
 serve: container
 	docker run -it --rm --name $(binary) \
+	-e COD_USERNAME=$(cod-username) \
+	-e COD_PASSWORD=$(cod-password) \
 	$(binary):$(gitVersion) \
 	serve -t $(token)
 
