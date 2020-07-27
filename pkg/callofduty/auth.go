@@ -131,7 +131,7 @@ func getXSRFToken() (*http.Cookie, error) {
 	}
 
 	// Add empty Header
-	req.Header.Set("Cookie: ", "")
+	req.Header.Set("Cookie", "")
 
 	// Submit the request
 	resp, err := client.Do(req)
