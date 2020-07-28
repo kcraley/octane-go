@@ -17,6 +17,14 @@ type Command struct {
 	Handler     ExecutionHandler
 }
 
+// HasSubcommands verifies if the command has additional subcommands
+func (c *Command) HasSubcommands() bool {
+	if len(c.SubCommands) > 0 {
+		return true
+	}
+	return false
+}
+
 // Trigger executes the Command
 func (c *Command) Trigger(s *discordgo.Session, m *discordgo.Message) error {
 	if err := c.Handler(s, m); err != nil {
