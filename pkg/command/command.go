@@ -31,9 +31,9 @@ func (c *Command) GetSubCommand(subcmd *Command) *Command {
 		if subcommand.HasSubcommands() {
 			return subcommand.GetSubCommand(subcommand)
 		}
-		return subcommand, nil
+		return subcommand
 	}
-	return &Command{}, nil
+	return &Command{}
 }
 
 // Trigger executes the Command
