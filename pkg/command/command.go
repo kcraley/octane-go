@@ -33,7 +33,7 @@ func (c *Command) GetSubCommand(subcmd *Command) *Command {
 		}
 		return subcommand
 	}
-	return &Command{}
+	return c
 }
 
 // Trigger executes the Command
