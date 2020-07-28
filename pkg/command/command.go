@@ -25,6 +25,17 @@ func (c *Command) HasSubcommands() bool {
 	return false
 }
 
+// GetSubCommand iterates through and returns a subcommand
+func (c *Command) GetSubCommand(subcmd *Command) *Command {
+	for _, subcommand := range c.SubCommands {
+		if subcommand.HasSubcommands() {
+			return subcommand.GetSubCommand(subcommand)
+		}
+		return subcommand, nil
+	}
+	return &Command{}, nil
+}
+
 // Trigger executes the Command
 func (c *Command) Trigger(s *discordgo.Session, m *discordgo.Message) error {
 	if err := c.Handler(s, m); err != nil {
