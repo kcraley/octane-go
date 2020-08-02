@@ -32,11 +32,34 @@ func (r *Router) handleMessageCreate(s *discordgo.Session, m *discordgo.MessageC
 		// Clean the message content to pull the command
 		content := strings.TrimPrefix(m.Content, r.Prefix)
 		content = strings.TrimSpace(content)
+		userCommands := strings.Split(content, " ")
 
-		if command, err := r.GetCommand(content); err != nil {
-			s.ChannelMessageSend(m.ChannelID, randomDefaultMessage())
+		if len(userCommands) > 0 && userCommands[0] != "" {
+			if command, err := r.GetCommand(userCommands[0]); err != nil {
+				// TODO: refactor how the help command is registered
+				// and triggered.  This will allow for a better way
+				// to provide the user with help/usage messages
+				s.ChannelMessageSend(m.ChannelID, "Sending help now...")
+			} else {
+				if command.HasSubcommands() && len(userCommands) > 1 {
+					final, err := command.GetFinalCommand(userCommands[1:])
+					if err != nil {
+						s.ChannelMessageSend(m.ChannelID, "Sending help now...")
+					}
+					final.Trigger(s, m.Message)
+				} else {
+					if command.IsRunnable() {
+						command.Trigger(s, m.Message)
+					} else {
+						// TODO: refactor how the help command is registered
+						// and triggered.  This will allow for a better way
+						// to provide the user with help/usage messages
+						s.ChannelMessageSend(m.ChannelID, "Sending help now...")
+					}
+				}
+			}
 		} else {
-			command.Trigger(s, m.Message)
+			s.ChannelMessageSend(m.ChannelID, randomDefaultMessage())
 		}
 	}
 }
