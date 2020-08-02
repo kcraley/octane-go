@@ -7,7 +7,7 @@ import (
 )
 
 // ExecutionHandler represents the function that is to be executed
-// type ExecutionHandler func(*discordgo.Session, *discordgo.Message) error
+type ExecutionHandler func(*discordgo.Session, *discordgo.Message) error
 
 // Command represents a single command which can
 // be triggered from end users
@@ -18,7 +18,7 @@ type Command struct {
 	Example     string
 	Flags       []string
 	SubCommands []*Command
-	Handler     func(*discordgo.Session, *discordgo.Message) error
+	Handler     ExecutionHandler
 }
 
 // HasSubcommands verifies if the command has additional subcommands
