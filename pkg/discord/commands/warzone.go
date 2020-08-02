@@ -12,17 +12,27 @@ import (
 	"github.com/bwmarrin/discordgo"
 )
 
-// WarzoneCmd is the bot command to lookup Call of Duty Warzone players
+// WarzoneCmd is the bot command to interact with the Call of Duty APIs
 var WarzoneCmd = &command.Command{
 	Name:        "warzone",
 	Description: "lookup a Call of Duty player",
 	Usage:       "warzone",
 	Example:     "warzone <player>",
-	Handler:     warzoneCmdFunc,
+	SubCommands: []*command.Command{WarzoneProfileCmd},
 }
 
-// warzoneCmdFunc is the handler function for looking up Call of Duty Warzone players
-func warzoneCmdFunc(s *discordgo.Session, m *discordgo.Message) error {
+// WarzoneProfileCmd is a subcommand of warzone which is responsible
+// for looking up player profiles
+var WarzoneProfileCmd = &command.Command{
+	Name:        "profile",
+	Description: "lookup a Call of Duty player profile",
+	Usage:       "warzone profile",
+	Example:     "warzone profile <player>",
+	Handler:     WarzoneProfileCmdFunc,
+}
+
+// WarzoneProfileCmdFunc is the handler function for looking up Call of Duty Warzone player profiles
+func WarzoneProfileCmdFunc(s *discordgo.Session, m *discordgo.Message) error {
 	// Login to the Call of Duty APIs if credentials are set
 	if os.Getenv("COD_USERNAME") != "" && os.Getenv("COD_PASSWORD") != "" {
 		// Create a client to interact with the Call of Duty APIs
