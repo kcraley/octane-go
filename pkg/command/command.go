@@ -2,6 +2,7 @@ package command
 
 import (
 	"errors"
+	"flag"
 
 	"github.com/bwmarrin/discordgo"
 )
@@ -16,9 +17,9 @@ type Command struct {
 	Description string
 	Usage       string
 	Example     string
-	Flags       []string
 	SubCommands []*Command
 	Handler     ExecutionHandler
+	flagSet     *flag.FlagSet
 }
 
 // HasSubcommands verifies if the command has additional subcommands
@@ -37,14 +38,14 @@ func (c *Command) IsRunnable() bool {
 // GetFinalCommand recursively iterates through a Command's
 // subcommands and returns the final command for a list of
 // commands
-func (c *Command) GetFinalCommand(commands []string) (*Command, error) {
+func (c *Command) GetFinalCommand(commands []string) (*Command, []string, error) {
 	for _, subcommand := range c.SubCommands {
-		if subcommand.Name == commands[0] && subcommand.HasSubcommands() {
+		if subcommand.HasSubcommands() && subcommand.Name == commands[0] {
 			return subcommand.GetFinalCommand(commands[1:])
 		}
-		return subcommand, nil
+		return subcommand, commands[1:], nil
 	}
-	return nil, errors.New("Subcommand does not exist")
+	return nil, nil, errors.New("Subcommand does not exist")
 }
 
 // GetSubCommand iterates through a Command's subcommands
@@ -56,6 +57,26 @@ func (c *Command) GetSubCommand(name string) (*Command, error) {
 		}
 	}
 	return nil, errors.New("Subcommand does not exist")
+}
+
+// Flags returns the FlagSet for the current command.  If an
+// existing FlagSet does not exist, a new one will be created
+// and returned.
+func (c *Command) Flags() *flag.FlagSet {
+	if c.flagSet == nil {
+		c.flagSet = flag.NewFlagSet(c.Name, flag.ContinueOnError)
+	}
+	return c.flagSet
+}
+
+// ParseFlags reads in all user provided input and updates
+// the commands flags
+func (c *Command) ParseFlags(input []string) error {
+	err := c.Flags().Parse(input)
+	if err != nil {
+		return err
+	}
+	return nil
 }
 
 // Trigger executes the Command
