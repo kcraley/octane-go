@@ -2,6 +2,7 @@ package commands
 
 import (
 	"errors"
+	"net/url"
 	"os"
 	"strconv"
 	"time"
@@ -21,14 +22,24 @@ var WarzoneCmd = &command.Command{
 	SubCommands: []*command.Command{WarzoneProfileCmd},
 }
 
-// WarzoneProfileCmd is a subcommand of warzone which is responsible
-// for looking up player profiles
-var WarzoneProfileCmd = &command.Command{
-	Name:        "profile",
-	Description: "lookup a Call of Duty player profile",
-	Usage:       "warzone profile",
-	Example:     "warzone profile <player>",
-	Handler:     WarzoneProfileCmdFunc,
+var (
+	// WarzoneProfileCmd is a subcommand of warzone which is responsible
+	// for looking up player profiles
+	WarzoneProfileCmd = &command.Command{
+		Name:        "profile",
+		Description: "lookup a Call of Duty player profile",
+		Usage:       "warzone profile",
+		Example:     "warzone profile <player>",
+		Handler:     WarzoneProfileCmdFunc,
+	}
+	// Variables used for parsing flags
+	wzProfPlatform string
+	wzProfProfile  string
+)
+
+func init() {
+	WarzoneProfileCmd.Flags().StringVar(&wzProfPlatform, "platform", "battle", "The platform where the user's account is registered.")
+	WarzoneProfileCmd.Flags().StringVar(&wzProfProfile, "profile", "", "The user's profile to lookup in Call of Duty's APIs.")
 }
 
 // WarzoneProfileCmdFunc is the handler function for looking up Call of Duty Warzone player profiles
@@ -42,7 +53,8 @@ func WarzoneProfileCmdFunc(s *discordgo.Session, m *discordgo.Message) error {
 			return err
 		}
 
-		playerProfile, err := codClient.GetProfile("mw", "battle", "CoaXeD%231353", "wz")
+		escapedProfile := url.QueryEscape(wzProfProfile)
+		playerProfile, err := codClient.GetProfile("mw", wzProfPlatform, escapedProfile, "wz")
 		if err != nil {
 			return err
 		}
