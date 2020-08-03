@@ -34,12 +34,12 @@ var (
 	}
 	// Variables used for parsing flags
 	wzProfPlatform string
-	wzProfProfile  string
+	wzProfUsername string
 )
 
 func init() {
 	WarzoneProfileCmd.Flags().StringVar(&wzProfPlatform, "platform", "battle", "The platform where the user's account is registered.")
-	WarzoneProfileCmd.Flags().StringVar(&wzProfProfile, "profile", "", "The user's profile to lookup in Call of Duty's APIs.")
+	WarzoneProfileCmd.Flags().StringVar(&wzProfUsername, "username", "", "The username to lookup in Call of Duty's APIs.")
 }
 
 // WarzoneProfileCmdFunc is the handler function for looking up Call of Duty Warzone player profiles
@@ -53,7 +53,7 @@ func WarzoneProfileCmdFunc(s *discordgo.Session, m *discordgo.Message) error {
 			return err
 		}
 
-		escapedProfile := url.QueryEscape(wzProfProfile)
+		escapedProfile := url.QueryEscape(wzProfUsername)
 		playerProfile, err := codClient.GetProfile("mw", wzProfPlatform, escapedProfile, "wz")
 		if err != nil {
 			return err
