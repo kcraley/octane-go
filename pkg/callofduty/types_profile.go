@@ -16,6 +16,26 @@ type Profile struct {
 	TotalXp          float64 `json:"totalXp"`
 }
 
+// BRStats is the statistics structure for battle royal mode
+type BRStats struct {
+	Wins           float64 `json:"wins"`
+	Kills          float64 `json:"kills"`
+	KdRatio        float64 `json:"kdRatio"`
+	Downs          float64 `json:"downs"`
+	TopTwentyFive  float64 `json:"topTwentyFive"`
+	TopTen         float64 `json:"topTen"`
+	Contracts      float64 `json:"contracts"`
+	Revives        float64 `json:"revives"`
+	TopFive        float64 `json:"topFive"`
+	Score          float64 `json:"score"`
+	TimePlayed     float64 `json:"timePlayed"`
+	GamesPlayed    float64 `json:"gamesPlayed"`
+	Tokens         float64 `json:"tokens"`
+	ScorePerMinute float64 `json:"scorePerMinute"`
+	Cash           float64 `json:"cash"`
+	Deaths         float64 `json:"deaths"`
+}
+
 // ProfileResponse is the entire response object
 // returned when getting a player's profile
 type ProfileResponse struct {
