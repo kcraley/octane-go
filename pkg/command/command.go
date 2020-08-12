@@ -3,6 +3,7 @@ package command
 import (
 	"errors"
 	"flag"
+	"strings"
 
 	"github.com/bwmarrin/discordgo"
 )
@@ -38,14 +39,15 @@ func (c *Command) IsRunnable() bool {
 // GetFinalCommand recursively iterates through a Command's
 // subcommands and returns the final command for a list of
 // commands
-func (c *Command) GetFinalCommand(commands []string) (*Command, []string, error) {
+func (c *Command) GetFinalCommand(commands []string) (*Command, []string) {
 	for _, subcommand := range c.SubCommands {
-		if subcommand.HasSubcommands() && subcommand.Name == commands[0] {
+		if strings.HasPrefix(commands[0], "-") {
+			continue
+		} else if subcommand.Name == commands[0] {
 			return subcommand.GetFinalCommand(commands[1:])
 		}
-		return subcommand, commands[1:], nil
 	}
-	return nil, nil, errors.New("Subcommand does not exist")
+	return c, commands
 }
 
 // GetSubCommand iterates through a Command's subcommands

@@ -42,10 +42,7 @@ func (r *Router) handleMessageCreate(s *discordgo.Session, m *discordgo.MessageC
 				s.ChannelMessageSend(m.ChannelID, "Sending help now...")
 			} else {
 				if command.HasSubcommands() && len(userCommands) > 1 {
-					final, args, err := command.GetFinalCommand(userCommands[1:])
-					if err != nil {
-						s.ChannelMessageSend(m.ChannelID, "Sending help now...")
-					}
+					final, args := command.GetFinalCommand(userCommands[1:])
 					final.ParseFlags(args)
 					final.Trigger(s, m.Message)
 				} else {
