@@ -41,6 +41,22 @@ func (c *Client) GetProfile(game, platform, username, mode string) (Profile, err
 	return profile, nil
 }
 
+// GetBRStats retrieves a player's profile and returns statistics
+func (c *Client) GetBRStats(game, platform, username, mode string) (BRStats, error) {
+	// Create an default empty BRStats type to return
+	brStats := BRStats{}
+
+	// Get the raw player profile response
+	profileResponse, err := c.GetProfileRaw(game, platform, username, mode)
+	if err != nil {
+		return brStats, err
+	}
+	// Copy over data
+	brStats = BRStats(profileResponse.Data.Lifetime.Mode.Br.Properties)
+
+	return brStats, nil
+}
+
 // GetProfileRaw retrieves a player's profile based on
 // the game, platform, username and mode
 func (c *Client) GetProfileRaw(game, platform, username, mode string) (*ProfileResponse, error) {
