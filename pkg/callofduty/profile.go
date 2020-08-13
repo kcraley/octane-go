@@ -20,48 +20,42 @@ const (
 )
 
 // GetProfile retrieves a simplified profile
-func (c *Client) GetProfile(game, platform, username, mode string) (Profile, error) {
+func (c *Client) GetProfile(game, platform, username, mode string) (ProfileData, error) {
 	// Create default Profile
-	profile := Profile{}
+	profileData := ProfileData{}
 
 	// Get the raw player profile response
 	profileResponse, err := c.GetProfileRaw(game, platform, username, mode)
 	if err != nil {
-		return profile, err
+		return profileData, err
 	}
 
-	profile.Title = profileResponse.Data.Title
-	profile.Platform = profileResponse.Data.Platform
-	profile.Username = profileResponse.Data.Username
-	profile.Type = profileResponse.Data.Type
-	profile.Level = profileResponse.Data.Level
-	profile.MaxLevel = profileResponse.Data.MaxLevel
-	profile.TotalXp = profileResponse.Data.TotalXp
+	profileData = ProfileData(profileResponse.Data)
 
-	return profile, nil
+	return profileData, nil
 }
 
-// GetBRStats retrieves a player's profile and returns statistics
-func (c *Client) GetBRStats(game, platform, username, mode string) (BRStats, error) {
+// GetBrAllModeStats retrieves a player's profile and returns statistics
+func (c *Client) GetBrAllModeStats(game, platform, username, mode string) (BrAllMode, error) {
 	// Create an default empty BRStats type to return
-	brStats := BRStats{}
+	brAllModeStats := BrAllMode{}
 
 	// Get the raw player profile response
 	profileResponse, err := c.GetProfileRaw(game, platform, username, mode)
 	if err != nil {
-		return brStats, err
+		return brAllModeStats, err
 	}
 	// Copy over data
-	brStats = BRStats(profileResponse.Data.Lifetime.Mode.Br.Properties)
+	brAllModeStats = BrAllMode(profileResponse.Data.Lifetime.Mode.BrAll)
 
-	return brStats, nil
+	return brAllModeStats, nil
 }
 
 // GetProfileRaw retrieves a player's profile based on
 // the game, platform, username and mode
-func (c *Client) GetProfileRaw(game, platform, username, mode string) (*ProfileResponse, error) {
+func (c *Client) GetProfileRaw(game, platform, username, mode string) (*Profile, error) {
 	// Create default ProfileResponse
-	profResp := &ProfileResponse{}
+	profResp := &Profile{}
 
 	// Set API version based on game value
 	var apiVersion string

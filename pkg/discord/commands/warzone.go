@@ -147,7 +147,7 @@ func WarzoneStatsCmdFunc(s *discordgo.Session, m *discordgo.Message) error {
 		}
 
 		escapedProfile := url.QueryEscape(strings.ToLower(wzProfUsername))
-		brStats, err := codClient.GetBRStats("mw", wzProfPlatform, escapedProfile, "wz")
+		brAllModeStats, err := codClient.GetBrAllModeStats("mw", wzProfPlatform, escapedProfile, "wz")
 		if err != nil {
 			return err
 		}
@@ -182,52 +182,52 @@ func WarzoneStatsCmdFunc(s *discordgo.Session, m *discordgo.Message) error {
 				},
 				{
 					Name:   "Games Played",
-					Value:  strconv.Itoa(int(brStats.GamesPlayed)),
+					Value:  strconv.Itoa(int(brAllModeStats.Properties.GamesPlayed)),
 					Inline: true,
 				},
 				{
 					Name:   "Wins",
-					Value:  strconv.Itoa(int(brStats.Wins)),
+					Value:  strconv.Itoa(int(brAllModeStats.Properties.Wins)),
 					Inline: true,
 				},
 				{
 					Name:   "Top Five",
-					Value:  strconv.Itoa(int(brStats.TopFive)),
+					Value:  strconv.Itoa(int(brAllModeStats.Properties.TopFive)),
 					Inline: true,
 				},
 				{
 					Name:   "Top Ten",
-					Value:  strconv.Itoa(int(brStats.TopTen)),
+					Value:  strconv.Itoa(int(brAllModeStats.Properties.TopTen)),
 					Inline: true,
 				},
 				{
 					Name:   "Top Twenty Five",
-					Value:  strconv.Itoa(int(brStats.TopTwentyFive)),
+					Value:  strconv.Itoa(int(brAllModeStats.Properties.TopTwentyFive)),
 					Inline: true,
 				},
 				{
 					Name:   "Kills",
-					Value:  strconv.Itoa(int(brStats.Kills)),
+					Value:  strconv.Itoa(int(brAllModeStats.Properties.Kills)),
 					Inline: true,
 				},
 				{
 					Name:   "Deaths",
-					Value:  strconv.Itoa(int(brStats.Deaths)),
+					Value:  strconv.Itoa(int(brAllModeStats.Properties.Deaths)),
 					Inline: true,
 				},
 				{
 					Name:   "K/D Ratio",
-					Value:  fmt.Sprintf("%f%%", brStats.KdRatio*100/100),
+					Value:  fmt.Sprintf("%f%%", brAllModeStats.Properties.KdRatio*100/100),
 					Inline: true,
 				},
 				{
 					Name:   "Downs",
-					Value:  strconv.Itoa(int(brStats.Downs)),
+					Value:  strconv.Itoa(int(brAllModeStats.Properties.Downs)),
 					Inline: true,
 				},
 				{
 					Name:   "Score",
-					Value:  strconv.Itoa(int(brStats.Score)),
+					Value:  strconv.Itoa(int(brAllModeStats.Properties.Score)),
 					Inline: true,
 				},
 			},
